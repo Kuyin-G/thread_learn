@@ -1,7 +1,9 @@
 package thread01.learn.terminal;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
+@Slf4j
 public class TerminalThreadTest {
 
     /**
@@ -46,20 +48,22 @@ public class TerminalThreadTest {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     current.interrupt(); // 重置打断标志，如果不重置打断标记无法退出
-                    e.printStackTrace();
+//                    e.printStackTrace();
                 }
             }
-            System.out.println("线程已经结束了");
+            log.info("线程已经被打断");
         });
 
         thread.start();
-        Thread.sleep(2000);
+        log.info("1.5秒后打断thread线程");
+        Thread.sleep(200);
         thread.interrupt(); //打断线程，产生打断标记
+        log.info("线程的打断状态：{}",thread.isInterrupted());
         Thread.sleep(3000);
     }
 
     public static void doSomethingBeforeTerminal(){
-        System.out.println("在线程终止前，处理相关的事情!!!");
+        log.info("在线程终止前，处理相关的事情!!!");
     }
 
 }

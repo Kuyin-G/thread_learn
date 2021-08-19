@@ -16,6 +16,7 @@ public class ThreadCreator {
      *   实质上全都是实现了Runnable的run方法
      * */
     @Test
+
     public void testExtendsOrImpl() throws ExecutionException, InterruptedException {
         /**
          * 1、通过继承Thread，重写run方法
@@ -31,8 +32,9 @@ public class ThreadCreator {
         thread.start();
 
         /**
-         * 2、通过实现Callable接口，实现call()方法，创建FutureTask实例，传递给Thread
-         * - 带返回只得线程
+         * 3、通过实现Callable接口，实现call()方法，创建FutureTask实例，传递给Thread
+         * - 带返回值的线程
+         * - 调用创建FutureTask实例的get(),会一直阻塞，等待线程的返回结果
          * */
         Callable<String> callable = new CallableImpl();
         FutureTask<String> futureTask = new FutureTask<>(callable);
@@ -43,7 +45,7 @@ public class ThreadCreator {
     }
 
     /**
-     *   如果只需要使用一次，可以使用匿名内部类
+     * 如果只需要使用一次，可以使用匿名内部类
      * */
     @Test
     public void testAnonymousClasses() throws ExecutionException, InterruptedException {
@@ -75,7 +77,7 @@ public class ThreadCreator {
     }
 
     /**
-     * 进阶的可以使用拉姆表达式，这里只有接口可以使用，继承的方式不可以使用
+     * 进阶的可以使用Lambda表达式，这里只有接口可以使用，继承的方式不可以使用
      */
     @Test
     public void testLambda() throws ExecutionException, InterruptedException {
@@ -86,10 +88,6 @@ public class ThreadCreator {
         new Thread(task).start();
         System.out.println(task.get());
     }
-
-
-
-
 }
 
 /**

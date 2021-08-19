@@ -8,15 +8,17 @@ import org.junit.Test;
 public class InvokeInterruptTest {
 
     /**
+     * interrupt()：用于打断线程
      * isInterrupted：判断是否被打断，不会清除打断标记
+     * Thread.interrupt()：判断是否中断，并清除中断标记
      * */
     @Test
     public void testInterrupt() throws InterruptedException {
 
         Thread thread = new Thread(()->{
             while (true){
+                // 为了响应中断操作，必须在线程中判断线程是否被中断，再执行中断后的操作。
                 if(Thread.currentThread().isInterrupted()){
-                    System.out.println();
                     break;
                 }
             }
@@ -26,7 +28,6 @@ public class InvokeInterruptTest {
         thread.start();
         Thread.sleep(500);
         thread.interrupt();
-
     }
 
     /**

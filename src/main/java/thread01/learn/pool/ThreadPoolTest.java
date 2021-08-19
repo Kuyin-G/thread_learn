@@ -16,7 +16,7 @@ public class ThreadPoolTest {
     @Test
     public void testFixedThreadPool() throws InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(5);
-        for(int i = 0; i< 40; i++){
+        for(int i = 1; i<= 40; i++){
             int temp = i;
             executorService.submit(()->{
                 try {

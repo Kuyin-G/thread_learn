@@ -24,7 +24,7 @@ public class Account {
     public void transfer(int transferMoney,Account targetAccount){
 
 
-        if(this.money<transferMoney){
+        if(this.money < transferMoney){
             log.info("余额不足，转账失败");
             return;
         }
