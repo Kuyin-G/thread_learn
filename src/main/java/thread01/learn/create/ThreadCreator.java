@@ -16,7 +16,6 @@ public class ThreadCreator {
      *   实质上全都是实现了Runnable的run方法
      * */
     @Test
-
     public void testExtendsOrImpl() throws ExecutionException, InterruptedException {
         /**
          * 1、通过继承Thread，重写run方法
