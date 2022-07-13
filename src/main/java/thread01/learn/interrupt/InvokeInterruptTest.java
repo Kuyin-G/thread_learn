@@ -2,6 +2,8 @@ package thread01.learn.interrupt;
 
 import org.junit.Test;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * 测试线程interrupt相关的api
  * */
@@ -28,6 +30,7 @@ public class InvokeInterruptTest {
         thread.start();
         Thread.sleep(500);
         thread.interrupt();
+        TimeUnit.SECONDS.sleep(1);
     }
 
     /**

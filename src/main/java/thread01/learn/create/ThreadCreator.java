@@ -1,6 +1,9 @@
 package thread01.learn.create;
 
 import org.junit.Test;
+import thread01.learn.create.ext.ThreadExt;
+import thread01.learn.create.impl.CallableImpl;
+import thread01.learn.create.impl.RunnableImpl;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -86,39 +89,5 @@ public class ThreadCreator {
         FutureTask<String> task = new FutureTask<>(() -> "使用匿名内部类创三");
         new Thread(task).start();
         System.out.println(task.get());
-    }
-}
-
-/**
- * 创建线程的方式一：继承Thread类，重写run方法
- * */
-class ThreadExt extends Thread{
-    @Override
-    public void run() {
-        System.out.println("创建线程的方式一：继承Thread类，重写run方法");
-    }
-}
-
-
-/**
- * 创建线程的方式二：实现Runnable接口，重写run方法
- * */
-class RunnableImpl implements Runnable{
-
-    @Override
-    public void run() {
-        System.out.println("创建线程的方式二：实现Runnable接口，重写run方法");
-    }
-}
-
-/**
- * 创建线程的方式三：实现Callable接口，call方法
- * */
-class CallableImpl implements Callable<String> {
-
-    @Override
-    public String call() throws Exception {
-        System.out.println("创建线程的方式三：实现Callable接口，call方法");
-        return "call";
     }
 }
