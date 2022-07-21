@@ -1,15 +1,83 @@
 package thread01.learn.interrupt;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
+import java.sql.Time;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * 测试线程interrupt相关的api
  * */
+@Slf4j
 public class InvokeInterruptTest {
 
     /**
+     * 方式1：
+     *      使用volatile字段修饰一个公共属性，
+     */
+    public volatile boolean isInterrupted=  false;
+    
+    @Test
+    public void testUseVolatileInterrupt() throws InterruptedException {
+        Thread thread = new Thread(()->{
+            while (true){
+                if(isInterrupted){
+                    log.info("{}已被中断",Thread.currentThread().getName());
+                    break; // 跳出循环，即可结束线程的运行，
+                }
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                log.info("正在运行的线程：{}", Thread.currentThread().getName());
+            }
+        },"测试volatile变量中断线程");
+        
+        thread.start();
+        // 2秒后修改中断标志
+        TimeUnit.SECONDS.sleep(2);
+        log.info("修改中断标志为true");
+        isInterrupted = true;
+        TimeUnit.SECONDS.sleep(2);
+        
+    }
+    
+    /**
+     * 使用AtomicBoolean进行中断线程：
+     *      
+     * */
+    public AtomicBoolean atomicInterrupted = new AtomicBoolean(false);
+    
+    @Test
+    public void testUseAtomicBooleanInterrupt() throws InterruptedException {
+        Thread thread = new Thread(()->{
+            while (true){
+                if(atomicInterrupted.get()){
+                    log.info("{}已被中断",Thread.currentThread().getName());
+                    break; // 跳出循环，即可结束线程的运行，
+                }
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                log.info("正在运行的线程：{}", Thread.currentThread().getName());
+            }
+        },"测试volatile变量中断线程");
+
+        thread.start();
+        // 2秒后修改中断标志
+        TimeUnit.SECONDS.sleep(2);
+        log.info("修改中断标志为true");
+        atomicInterrupted.compareAndSet(false,true);
+        TimeUnit.SECONDS.sleep(2);
+    }
+
+    /**
+     * 方式三:
      * interrupt()：用于打断线程
      * isInterrupted：判断是否被打断，不会清除打断标记
      * Thread.interrupt()：判断是否中断，并清除中断标记
