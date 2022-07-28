@@ -3,6 +3,7 @@ package thread02.reentrant.lock;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -45,13 +46,73 @@ public class ReentrantLockTest {
     
     
     @Test
-    public void testReentrantLockCondition(){
+    public void testReentrantLockCondition() throws InterruptedException {
         
         ReentrantLock lock = new ReentrantLock();
-        Condition waitPenCondition = lock.newCondition();
-        Condition waitBookCondition = lock.newCondition();
+        Condition condition = lock.newCondition();
+
+        new Thread(()->{
+            lock.lock();
+            log.info("线程：{} 进入", Thread.currentThread().getName());
+            try {
+                condition.await();
+                log.info("线程：{}被唤醒", Thread.currentThread().getName());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }finally {
+                lock.unlock();
+            }
+
+        }, "t1").start();
+
+        TimeUnit.SECONDS.sleep(2);
+
+        new Thread(()->{
+            lock.lock();
+            try {
+                condition.signal();
+                log.info("线程：{}发出通知", Thread.currentThread().getName());
+            } finally {
+                lock.unlock();
+            }
+
+        }, "t2").start();
 
     }
 
+    /**
+     * 测试没有使用lock()/unlock的情况
+     * */
+    @Test
+    public void testWithoutLockAndUnlock() throws InterruptedException {
+        ReentrantLock lock = new ReentrantLock();
+        Condition condition = lock.newCondition();
+        new Thread(()->{
+//            lock.lock();
+            log.info("线程：{} 进入", Thread.currentThread().getName());
+            try {
+                condition.await();
+                log.info("线程：{}被唤醒", Thread.currentThread().getName());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }finally {
+//                lock.unlock();
+            }
+
+        }, "t1").start();
+
+        TimeUnit.SECONDS.sleep(2);
+
+        new Thread(()->{
+//            lock.lock();
+            try {
+                condition.signal();
+                log.info("线程：{}发出通知", Thread.currentThread().getName());
+            } finally {
+//                lock.unlock();
+            }
+
+        }, "t2").start();
+    }
 
 }

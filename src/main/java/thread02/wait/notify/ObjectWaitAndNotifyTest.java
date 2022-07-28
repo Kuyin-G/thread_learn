@@ -3,6 +3,8 @@ package thread02.wait.notify;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
+import java.util.concurrent.TimeUnit;
+
 @Slf4j
 public class ObjectWaitAndNotifyTest {
 
@@ -92,4 +94,32 @@ public class ObjectWaitAndNotifyTest {
         }
     }
 
+
+    @Test
+    public void testWaitAndNotify() throws InterruptedException {
+        // 锁对象
+        Object lockObj = new Object();
+        new Thread(()->{
+            log.info("线程：{}进入", Thread.currentThread().getName());
+            synchronized (lockObj){
+                try {
+                    lockObj.wait(); // 调用wait()方法后，线程释放锁资源，其他线程可以获得锁资源
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                log.info("线程：{}被唤醒", Thread.currentThread().getName());
+            }
+        }, "t1").start();
+
+        TimeUnit.SECONDS.sleep(2);
+
+        // 2秒后新起一个线程进行唤醒
+        new Thread(()->{
+            log.info("线程：{}进入", Thread.currentThread().getName());
+            synchronized (lockObj){
+                lockObj.notify(); // 调用wait()方法后，线程释放锁资源，其他线程可以获得锁资源
+                log.info("线程：{}发出通知", Thread.currentThread().getName());
+            }
+        }, "t2").start();
+    }
 }
