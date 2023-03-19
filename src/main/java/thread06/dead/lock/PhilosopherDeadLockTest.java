@@ -15,6 +15,8 @@ public class PhilosopherDeadLockTest {
 
     /**
      * 造成死锁的原因：多个线程彼此持有对方的所资源，在等待对方释放锁
+     *
+     * 使用排查死锁的方法： jps   jstack
      * */
     @Test
     public void testDeadLock() throws InterruptedException {

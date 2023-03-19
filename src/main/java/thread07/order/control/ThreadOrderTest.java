@@ -10,7 +10,7 @@ import java.util.concurrent.locks.LockSupport;
 public class ThreadOrderTest {
 
     static Object lock = new Object();
-    static boolean t1RunFlag = false;
+    static volatile boolean t1RunFlag = false;
 
     /**
      * 在线程t1之后运行线程t2

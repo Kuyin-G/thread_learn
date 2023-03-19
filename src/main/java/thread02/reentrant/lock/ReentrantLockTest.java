@@ -15,6 +15,7 @@ public class ReentrantLockTest {
      *      1、lock() :进行加锁，
      *      2、unlock():释放锁资源
      *      3、tryLock()、tryLock(long n, TimeUnit) :尝试进行加锁，返回加锁是否成功
+     *      4、lockInterruptibly(): 获得锁，但优先响应中断, 除非当前线程是 interrupted，否则获取锁定。
      * */
 
     @Test
@@ -115,4 +116,26 @@ public class ReentrantLockTest {
         }, "t2").start();
     }
 
+    /**
+     * 解决死锁的两种方式
+     * 1. 主动放弃： 在长时间获取不到所资源后，就进行进行主动放弃，释放自己获得的锁资源
+     * 2. 有限等待：
+     * */
+
+    @Test
+    public void testInterruptDeadThread() throws InterruptedException {
+        InterruptDeadThread interruptDeadThread = new InterruptDeadThread(1);
+        InterruptDeadThread interruptDeadThread2 = new InterruptDeadThread(2);
+
+        Thread thread1 = new Thread(interruptDeadThread, "线程1");
+        Thread thread2 = new Thread(interruptDeadThread2, "线程2");
+        thread1.start();
+        thread2.start();
+
+        Thread.sleep(1000);
+        thread2.interrupt();
+        Thread.sleep(1000);
+    }
+
 }
+

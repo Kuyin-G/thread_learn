@@ -43,7 +43,7 @@ public class ObjectWaitAndNotifyTest {
 
                 try {
                     // 会让当前线程让出cpu的执行全
-                    object.wait ();
+                    object.wait (); // 调用await()，线程会释放锁资源
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
